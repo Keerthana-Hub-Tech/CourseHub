@@ -14,7 +14,7 @@
      <a href="#" onclick="logout()">Logout</a>
   </nav>
 
- <!-- ✅ Dashboard Section -->
+ <!-- Dashboard Section -->
 <div class="page-box" id="dashboard" style="display: none;">
   <h2>👋 Welcome, <span id="userNamePlaceholder"></span>!</h2>
   <h3>How CourseHub Works</h3>
@@ -177,7 +177,7 @@
       setTimeout(() => toast.remove(), 3000);
     }
 
-    // ✅ On page load: show dashboard first, and then load courses
+    // On page load: show dashboard first, and then load courses
     document.addEventListener("DOMContentLoaded", () => {
       const username = localStorage.getItem("username");
       if (username) {
