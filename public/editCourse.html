@@ -15,7 +15,7 @@
     <a href="#" onclick="logout()">Logout</a>
   </nav>
 
-  <!-- ✅ Wrap heading and form together -->
+  
   <div class="page-box">
     <h2>Edit Course</h2>
 
@@ -49,7 +49,7 @@
         document.getElementById("videoUrl").value = course.videoUrl;
         document.getElementById("notesLink").value = course.notesLink;
       } catch (err) {
-        console.error("❌ loadCourse error:", err);
+        console.error("loadCourse error:", err);
         showToast("Failed to load course", false);
       }
     }
@@ -82,7 +82,7 @@
           showToast("❌ Error: " + result, false);
         }
       } catch (err) {
-        console.error("❌ updateCourse error:", err);
+        console.error("updateCourse error:", err);
         showToast("Error updating course", false);
       }
     });
