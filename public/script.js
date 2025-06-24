@@ -1,27 +1,26 @@
-// ✅ script.js - shared client-side logic for CourseHub
+//  script.js - shared client-side logic for CourseHub
 
-// 🌐 Base API URL (adjust if deploying)
+//  Base API URL 
 const BASE_API = "http://localhost:5000";
 
-// ✅ Logout: clear localStorage and redirect
+
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
-  localStorage.removeItem("username"); // ✅ Also remove username
+  localStorage.removeItem("username"); 
   window.location.href = "login.html";
 }
 
-// ✅ Check if user is logged in (can be used for protected routes)
+
 function isLoggedIn() {
   return !!localStorage.getItem("token");
 }
 
-// ✅ Get stored role
 function getUserRole() {
   return localStorage.getItem("role");
 }
 
-// ✅ Set navigation highlight (optional)
+
 function setActiveLink() {
   const links = document.querySelectorAll("nav a");
   const current = window.location.pathname;
@@ -33,7 +32,7 @@ function setActiveLink() {
   });
 }
 
-// ✅ Filter courses by title (works for both admin and user dashboards)
+
 function filterCourses() {
   const input = document.getElementById("searchInput");
   const filter = input.value.toLowerCase();
@@ -45,7 +44,7 @@ function filterCourses() {
   });
 }
 
-// ✅ Show toast notification (green by default, red for errors)
+// Show toast notification (green by default, red for errors)
 function showToast(message, success = true) {
   const toast = document.createElement("div");
   toast.className = "toast";
@@ -57,12 +56,12 @@ function showToast(message, success = true) {
   setTimeout(() => toast.remove(), 3000);
 }
 
-// ✅ Store username after login (you must call this in login logic)
+// Store username after login (you must call this in login logic)
 function storeUsername(username) {
   localStorage.setItem("username", username);
 }
 
-// ✅ Call on page load if needed
+
 document.addEventListener("DOMContentLoaded", () => {
   setActiveLink();
 });
