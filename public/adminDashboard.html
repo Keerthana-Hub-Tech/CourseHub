@@ -15,7 +15,7 @@
     <a href="#" onclick="logout()">Logout</a>
   </nav>
 
-  <!-- 📊 Dashboard Summary -->
+  <!-- Dashboard Summary -->
   <div class="dashboard-container">
     <h2>👋 Welcome, Admin</h2>
     <h3>📊 Platform Statistics</h3>
@@ -24,7 +24,7 @@
     <p>Total Enrollments: <span id="enrollCount">-</span></p>
   </div>
 
-  <!-- Optional toast container -->
+
   <div id="toast-container"></div>
 
   <script>
@@ -45,7 +45,7 @@
         document.getElementById("enrollCount").innerText = data.enrollmentsCount;
       } catch (err) {
         console.error("Error fetching stats", err);
-        showToast("❌ Failed to load dashboard stats");
+        showToast("Failed to load dashboard stats");
       }
     }
 
