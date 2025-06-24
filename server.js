@@ -15,8 +15,8 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('MongoDB Connected ✅'))
-.catch(err => console.error('MongoDB Connection Error ❌', err));
+.then(() => console.log('MongoDB Connected '))
+.catch(err => console.error('MongoDB Connection Error ', err));
 
 // API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -30,12 +30,12 @@ app.get('/', (req, res) => {
   res.send('CourseHub API is running 🚀');
 });
 
-// Optional: Handle unknown routes
+
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-// Optional: Global error handler
+
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
   res.status(500).json({ error: "Something went wrong on the server." });
