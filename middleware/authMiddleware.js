@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-// ✅ Auth for All Logged-In Users
+
 const authenticateUser = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -20,7 +20,7 @@ const authenticateUser = (req, res, next) => {
   }
 };
 
-// ✅ Admin Only
+
 const requireAdmin = (req, res, next) => {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ error: 'Only admins can perform this action.' });
