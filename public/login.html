@@ -41,15 +41,15 @@
         });
 
         const data = await response.json();
-        console.log("📦 Login API response:", data);
+        console.log("Login API response:", data);
 
         if (response.ok && data.token && data.user && data.user.role) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("role", data.user.role);
-          localStorage.setItem("username", data.user.name); // ✅ store username
+          localStorage.setItem("username", data.user.name); 
 
           const role = data.user.role;
-          console.log("✅ Role is:", role);
+          console.log("Role is:", role);
         
 
           setTimeout(() => {
@@ -62,7 +62,7 @@
             }
           }, 100);
         } else {
-          document.getElementById("result").innerText = data.error || "Login failed ❌";
+          document.getElementById("result").innerText = data.error || "Login failed ";
         }
       } catch (err) {
         console.error("Login error:", err);
