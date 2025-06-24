@@ -51,12 +51,12 @@
         });
 
         const data = await response.json();
-        console.log("📦 Registration response:", data);
+        console.log("Registration response:", data);
 
         if (response.ok && data.token && data.user && data.user.role) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("role", data.user.role);
-          storeUsername(data.user.name); // ✅ From script.js
+          storeUsername(data.user.name); 
 
           showToast("🎉 Registered successfully!", true); // Optional success toast
 
@@ -68,8 +68,8 @@
             }
           }, 100);
         } else {
-          console.log("❌ Registration failed with error:", data);
-          document.getElementById("result").innerText = data.error || "Registration failed ❌";
+          console.log("Registration failed with error:", data);
+          document.getElementById("result").innerText = data.error || "Registration failed ";
         }
       } catch (err) {
         console.error("Registration error:", err);
