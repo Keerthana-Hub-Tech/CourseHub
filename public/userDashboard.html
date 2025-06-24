@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard - CourseHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <a href="#" onclick="showDashboard()">Dashboard</a>
+    <a href="#" onclick="loadCourses()">All Courses</a>
+    <a href="#" onclick="loadEnrolledCourses()">Enrolled Courses</a>
+     <a href="#" onclick="logout()">Logout</a>
+  </nav>
+
+ <!-- ✅ Dashboard Section -->
+<div class="page-box" id="dashboard" style="display: none;">
+  <h2>👋 Welcome, <span id="userNamePlaceholder"></span>!</h2>
+  <h3>How CourseHub Works</h3>
+  <ol>
+    <li>🔍 Browse or search available courses</li>
+    <li>Click "Enroll" to join a course</li>
+    <li>Once done, mark the course as completed</li>
+    <li>Then download your certificate</li>
+  </ol>
+</div>
+
+<section id="courseBrowsingSection" class="page-box" style="display: none;">
+  <input type="text" id="searchInput" placeholder="🔍 Search courses..." oninput="filterCourses()" />
+  <h2 id="courseSectionTitle">Available Courses</h2>
+  <div id="courseList"></div>
+</section>
+
+
+
+  <script>
+    function showDashboard() {
+  document.getElementById("dashboard").style.display = "block";
+  document.getElementById("courseBrowsingSection").style.display = "none";
+
+  const username = localStorage.getItem("username");
+  if (username) {
+    document.getElementById("userNamePlaceholder").innerText = username;
+  }
+}
+
+    async function loadCourses() {
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("courseBrowsingSection").style.display = "block";
+  document.getElementById("courseSectionTitle").innerText = "Available Courses";
+
+  const response = await fetch("http://localhost:5000/api/courses");
+  const courses = await response.json();
+
+  const courseList = document.getElementById("courseList");
+  courseList.innerHTML = "";
+
+  courses.forEach(course => {
+    const courseDiv = document.createElement("div");
+    courseDiv.classList.add("course-card");
+    courseDiv.innerHTML = `
+      <h3>${course.title}</h3>
+      <p>${course.description}</p>
+      <a href="${course.videoUrl}" target="_blank">Watch Video</a><br>
+      <a href="${course.notesLink}" target="_blank">Download Notes</a><br><br>
+      <button onclick="enroll(event, '${course._id}')">Enroll</button>
+      <button onclick="completeCourse(event, '${course._id}')">Mark as Completed</button>
+      <button onclick="downloadCertificate('${course._id}')">Download Certificate</button>
+      <hr>
+    `;
+    courseList.appendChild(courseDiv);
+  });
+}
+
+    async function enroll(event, courseId) {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/api/enroll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ courseId })
+      });
+
+      const result = await response.json();
+      showToast(result.message || result.error);
+
+      event.target.disabled = true;
+      event.target.innerText = "Enrolled ✅";
+    }
+
+    async function completeCourse(event, courseId) {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/api/enroll/complete", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ courseId })
+      });
+
+      const result = await response.json();
+      showToast(result.message || result.error);
+
+      event.target.disabled = true;
+      event.target.innerText = "Completed 🎉";
+    }
+
+    async function downloadCertificate(courseId) {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:5000/api/enroll/certificate/${courseId}`, {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        showToast(errorData.error);
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'certificate.pdf';
+      a.click();
+    }
+
+    async function loadEnrolledCourses() {
+      document.getElementById("dashboard").style.display = "none";
+      document.getElementById("searchInput").style.display = "block";
+      document.getElementById("courseSectionTitle").style.display = "block";
+      document.getElementById("courseList").style.display = "block";
+      document.getElementById("courseSectionTitle").innerText = "Enrolled Courses";
+
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/api/enroll/my", {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      const data = await response.json();
+      const courseList = document.getElementById("courseList");
+      courseList.innerHTML = "";
+
+      data.forEach(enroll => {
+        const course = enroll.courseId;
+        const div = document.createElement("div");
+        div.classList.add("course-card");
+        div.innerHTML = `
+          <h3>${course.title}</h3>
+          <p>${course.description}</p>
+          <a href="${course.videoUrl}" target="_blank">Watch video</a><br>
+          <a href="${course.notesLink}" target="_blank">Notes</a><br>
+          <p>Status: ${enroll.status}</p>
+          ${!enroll.certificateIssued 
+            ? `<button onclick="completeCourse(event, '${course._id}')">✅ Mark Completed</button>` 
+            : `<button onclick="downloadCertificate('${course._id}')">Download Certificate</button>`}
+          <hr>
+        `;
+        courseList.appendChild(div);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerText = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ✅ On page load: show dashboard first, and then load courses
+    document.addEventListener("DOMContentLoaded", () => {
+      const username = localStorage.getItem("username");
+      if (username) {
+        document.getElementById("userNamePlaceholder").innerText = username;
+      }
+      showDashboard();
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

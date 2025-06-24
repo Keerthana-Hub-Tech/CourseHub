@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - CourseHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+  <div class="container">
+    <h2>Register</h2>
+
+    <form id="registerForm">
+      <input type="text" placeholder="Name" id="name" required><br><br>
+      <input type="email" placeholder="Email" id="email" required><br><br>
+      <input type="password" placeholder="Password" id="password" required><br><br>
+
+      <select id="role" required>
+        <option value="">Select Role</option>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select><br><br>
+
+      <button type="submit">Register</button>
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+    </form>
+
+    <p id="result" style="color: red;"></p>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const role = document.getElementById("role").value;
+
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password, role })
+        });
+
+        const data = await response.json();
+        console.log("📦 Registration response:", data);
+
+        if (response.ok && data.token && data.user && data.user.role) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.user.role);
+          storeUsername(data.user.name); // ✅ From script.js
+
+          showToast("🎉 Registered successfully!", true); // Optional success toast
+
+          setTimeout(() => {
+            if (data.user.role === "admin") {
+              window.location.href = "adminDashboard.html";
+            } else {
+              window.location.href = "userDashboard.html";
+            }
+          }, 100);
+        } else {
+          console.log("❌ Registration failed with error:", data);
+          document.getElementById("result").innerText = data.error || "Registration failed ❌";
+        }
+      } catch (err) {
+        console.error("Registration error:", err);
+        document.getElementById("result").innerText = "Something went wrong.";
+      }
+    });
+  </script>
+</body>
+</html>

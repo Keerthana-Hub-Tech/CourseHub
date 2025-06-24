@@ -1,0 +1,353 @@
+/* 🌐 Base Page Styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8;
+  color: #333;
+  animation: fadeIn 0.8s ease;
+}
+
+/* 👇 Push page down to accommodate fixed navbar */
+body {
+  padding-top: 70px;
+}
+
+/* 🚀 Navigation Bar */
+nav {
+  background-color: #34495e;
+  width: 100vw;
+  padding: 14px 24px;
+  margin: 0;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  animation: slideDown 0.6s ease forwards;
+}
+
+nav a, nav button {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 16px;
+  transition: color 0.3s;
+}
+
+nav a:hover, nav button:hover {
+  text-decoration: underline;
+  color: #bdc3c7;
+}
+
+/* 🎯 Headings */
+h1, h2, h3 {
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+/* 📦 Forms */
+form {
+  background-color: #fff;
+  padding: 24px;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  animation: fadeInUp 0.7s ease;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+  outline: none;
+}
+
+/* 🔘 Buttons */
+button {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 🔔 Toast Notification */
+.toast {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background-color: #333;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  z-index: 9999;
+  font-size: 14px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.4s ease, fadeOut 0.5s ease 2.5s forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* 📚 Course Cards */
+.course-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e1e4e8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin: 20px auto;
+  max-width: 700px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.course-card h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.course-card p {
+  margin-bottom: 10px;
+}
+
+.course-card a {
+  color: #2980b9;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.course-card a:hover {
+  text-decoration: underline;
+  color: #1c5985;
+}
+
+/* 🔎 Search Input */
+#searchInput {
+  display: block;
+  margin: 20px auto;
+  max-width: 500px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* 🧠 Section Titles */
+#courseSectionTitle {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 30px;
+}
+
+/* 👤 Welcome Text Container */
+#welcomeContainer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav a, nav button {
+    margin: 5px 0;
+  }
+
+  .course-card {
+    margin: 15px 10px;
+  }
+
+  form {
+    margin: 20px;
+  }
+
+  #searchInput {
+    width: 90%;
+  }
+}
+
+/* ✨ Centered Flex Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 20px;
+  animation: fadeInUp 0.8s ease both;
+}
+
+/* 🧱 Centered Page Container */
+.page-box {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  animation: fadeInUp 0.7s ease;
+}
+
+.page-box h1, .page-box h2, .page-box h3 {
+  text-align: center;
+}
+
+/* 🪄 Dashboard Instructions List */
+.page-box ol {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+/* 📊 Admin Dashboard Stats */
+.dashboard-container {
+  background-color: #fff;
+  padding: 24px;
+  margin: 40px auto;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.8s ease;
+}
+
+.dashboard-container h2,
+.dashboard-container h3 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+/* 📸 Landing Background */
+body.index-landing {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: url('https://wallpapercave.com/wp/wp2036967.jpg') no-repeat center center / cover;
+  background-attachment: fixed;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🧊 Index Container */
+.index-landing .container {
+  background-color: rgba(255, 255, 255, 0.75);
+  color: #2c3e50;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  font-weight: 500;
+  padding: 30px 30px;
+  width: 60%;
+  max-width: 480px;
+  text-align: center;
+  animation: fadeIn 1.2s ease;
+}
+
+/* ✏️ Landing Page Text */
+.index-landing h1 {
+  font-size: 32px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.index-landing p {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* 🔘 Landing Page Button */
+.index-landing .btn-group button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.index-landing .btn-group button:hover {
+  background-color: #217dbb;
+}
+
+/* 🌟 Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

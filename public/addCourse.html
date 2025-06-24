@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Add Course - Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="adminDashboard.html">Dashboard</a> |
+    <a href="addCourse.html">Add Course</a> |
+    <a href="viewCourses.html">View Courses</a> |
+     <a href="viewEnrollments.html">View Enrollments</a> |
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
+
+  <div class="page-box">
+  <h2>Add New Course</h2>
+
+  <form id="courseForm">
+    <input type="text" id="title" placeholder="Course Title" required><br><br>
+    <textarea id="description" placeholder="Description" required></textarea><br><br>
+    <input type="text" id="videoUrl" placeholder="Video URL" required><br><br>
+    <input type="text" id="notesLink" placeholder="Notes Link" required><br><br>
+    <button type="submit">Add Course</button>
+  </form>
+</div>
+
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById("courseForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const token = "Bearer " + localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/api/courses/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token
+        },
+        body: JSON.stringify({
+          title: document.getElementById("title").value,
+          description: document.getElementById("description").value,
+          videoUrl: document.getElementById("videoUrl").value,
+          notesLink: document.getElementById("notesLink").value
+        })
+      });
+
+      const result = await response.json();
+      showToast(result.message || result.error);
+    });
+
+    // ✅ Toast display function
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerText = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
+</body>
+</html>

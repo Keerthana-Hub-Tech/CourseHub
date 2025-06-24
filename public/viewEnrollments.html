@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Enrollments - Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="adminDashboard.html">Dashboard</a> |
+    <a href="addCourse.html">Add Course</a> |
+    <a href="viewCourses.html">View Courses</a> |
+    <a href="viewEnrollments.html">View Enrollments</a> |
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
+
+<div class="page-box">
+  <h2>All Enrollments</h2>
+
+  <input type="text" id="searchInput" placeholder="🔍 Search by course name..." oninput="filterEnrollments()" />
+
+  <div id="enrollmentList"></div>
+</div>
+
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <script src="script.js"></script>
+  <script>
+    let enrollments = [];
+
+    async function loadEnrollments() {
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await fetch("http://localhost:5000/api/enroll/all", {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        });
+
+        enrollments = await response.json();
+        renderEnrollments(enrollments);
+      } catch (err) {
+        console.error("Failed to fetch enrollments", err);
+        showToast("❌ Failed to load enrollments.");
+      }
+    }
+
+    function renderEnrollments(data) {
+      const listDiv = document.getElementById("enrollmentList");
+      listDiv.innerHTML = "";
+
+      if (data.length === 0) {
+        listDiv.innerHTML = "<p>No enrollments found.</p>";
+        return;
+      }
+
+      data.forEach(enroll => {
+        const div = document.createElement("div");
+        div.classList.add("course-card");
+        div.innerHTML = `
+          <strong>User:</strong> ${enroll.userId?.email || "N/A"}<br>
+          <strong>Course:</strong> <span class="course-title">${enroll.courseId?.title || "N/A"}</span><br>
+          <strong>Status:</strong> ${enroll.status}<br>
+          <strong>Certificate:</strong> ${enroll.certificateIssued ? 'Issued' : 'Not yet'}<br><hr>
+        `;
+        listDiv.appendChild(div);
+      });
+    }
+
+    function filterEnrollments() {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = enrollments.filter(e => 
+        e.courseId?.title?.toLowerCase().includes(keyword)
+      );
+      renderEnrollments(filtered);
+    }
+
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerText = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    loadEnrollments();
+  </script>
+</body>
+</html>

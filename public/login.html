@@ -1,0 +1,76 @@
+<!-- public/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - CourseHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="register.html">Register</a>
+  </nav>
+
+  <div class="container">
+    <h2>Login (Admin/User)</h2>
+
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required><br><br>
+      <input type="password" id="password" placeholder="Password" required><br><br>
+      <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="register.html">Register here</a></p>
+    <p id="result" style="color: red;"></p>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+        console.log("📦 Login API response:", data);
+
+        if (response.ok && data.token && data.user && data.user.role) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.user.role);
+          localStorage.setItem("username", data.user.name); // ✅ store username
+
+          const role = data.user.role;
+          console.log("✅ Role is:", role);
+        
+
+          setTimeout(() => {
+            if (role === "admin") {
+              window.location.href = "adminDashboard.html";
+            } else if (role === "user") {
+              window.location.href = "userDashboard.html";
+            } else {
+              document.getElementById("result").innerText = "Unknown role.";
+            }
+          }, 100);
+        } else {
+          document.getElementById("result").innerText = data.error || "Login failed ❌";
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+        document.getElementById("result").innerText = "Something went wrong.";
+      }
+    });
+  </script>
+<script src="script.js"></script>
+
+</body>
+</html>
