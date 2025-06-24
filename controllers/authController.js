@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// ✅ Register Controller
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// ✅ Login Controller
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
 
-    // ✅ THIS IS THE RESPONSE your frontend expects
+  
     return res.json({
       message: 'Login successful',
       token,
@@ -59,7 +59,6 @@ exports.login = async (req, res) => {
 };
 
 
-// ✅ Admin: Get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}, '-password'); // Exclude passwords
