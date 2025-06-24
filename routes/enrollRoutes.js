@@ -6,7 +6,7 @@ const PDFDocument = require('pdfkit');
 const User = require('../models/User');
 const Course = require('../models/Course');
 
-// ✅ Enroll in course
+
 router.post('/', authenticateUser, async (req, res) => {
   const { courseId } = req.body;
   const userId = req.user.id;
@@ -24,7 +24,7 @@ router.post('/', authenticateUser, async (req, res) => {
   }
 });
 
-// ✅ Mark complete + auto-issue certificate
+
 router.put('/complete', authenticateUser, async (req, res) => {
   const { courseId } = req.body;
   const userId = req.user.id;
@@ -34,7 +34,7 @@ router.put('/complete', authenticateUser, async (req, res) => {
     if (!enrollment) return res.status(404).json({ error: 'Enrollment not found' });
 
     enrollment.status = 'completed';
-    enrollment.certificateIssued = true; // 🔁 Automatically issue certificate
+    enrollment.certificateIssued = true; // Automatically issue certificate
     await enrollment.save();
 
     res.json({ message: 'Course marked as completed and certificate issued!' });
@@ -43,7 +43,7 @@ router.put('/complete', authenticateUser, async (req, res) => {
   }
 });
 
-// ✅ Download Certificate (only if course completed)
+// Download Certificate (only if course completed)
 router.get('/certificate/:courseId', authenticateUser, async (req, res) => {
   const userId = req.user.id;
   const { courseId } = req.params;
@@ -81,7 +81,7 @@ router.get('/certificate/:courseId', authenticateUser, async (req, res) => {
   }
 });
 
-// ✅ Admin: View all enrollments
+// Admin: View all enrollments
 router.get('/all', authenticateUser, requireAdmin, async (req, res) => {
   try {
     const allEnrollments = await Enrollment.find().populate('userId').populate('courseId');
@@ -91,19 +91,19 @@ router.get('/all', authenticateUser, requireAdmin, async (req, res) => {
   }
 });
 
-// ✅ Get all enrollments for the current user
+//  Get all enrollments for the current user
 router.get('/user', authenticateUser, async (req, res) => {
   try {
     const enrollments = await Enrollment.find({ userId: req.user.id }).populate('courseId');
     res.json(enrollments);
   } catch (err) {
-    console.error('❌ Error fetching user enrollments:', err);
+    console.error('Error fetching user enrollments:', err);
     res.status(500).json({ error: 'Failed to fetch enrollments' });
   }
 });
-// 📂 In routes/enroll.js
 
-// ✅ Get all enrolled courses for the logged-in user
+
+// Get all enrolled courses for the logged-in user
 router.get('/my', authenticateUser, async (req, res) => {
   try {
     const enrollments = await Enrollment.find({ userId: req.user.id })
